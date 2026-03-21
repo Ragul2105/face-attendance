@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Camera Stream - Face Attendance System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .stream-container {
+            text-align: center;
+            margin: 20px 0;
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        #stream {
+            width: 100%;
+            max-width: 1024px;
+            height: auto;
+            border: 3px solid #4CAF50;
+            border-radius: 8px;
+            background-color: #000;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .status.loading {
+            color: #FFC107;
+        }
+        .status.error {
+            color: #f44336;
+        }
+        .status.success {
+            color: #4CAF50;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.stop {
+            background-color: #f44336;
+        }
+        button.stop:hover {
+            background-color: #da190b;
+        }
+        .info {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .info h3 {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        .info ul {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Live Camera Stream</h1>
+
+        <div id="status" class="status loading">
+            Loading camera stream...
+        </div>
+
+        <div class="stream-container">
+            <img id="stream" alt="Camera Stream" />
+        </div>
+
+        <div class="controls">
+            <button onclick="startStream()">Start Stream</button>
+            <button class="stop" onclick="stopStream()">Stop Stream</button>
+            <button onclick="location.reload()">Refresh Page</button>
+        </div>
+
+        <div class="info">
+            <h3>Information</h3>
+            <ul>
+                <li><strong>Stream URL:</strong> http://localhost:8000/api/v1/camera/stream</li>
+                <li><strong>Status:</strong> <span id="stream-status">Initializing...</span></li>
+                <li><strong>Features:</strong> Face detection, recognition, liveness check, and attendance marking</li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <h3>Troubleshooting</h3>
+            <ul>
+                <li>If you see a black screen, check the API server logs for errors</li>
+                <li>Make sure the API server is running on port 8000</li>
+                <li>Check camera permissions in System Preferences (macOS)</li>
+                <li>Verify that CAMERA_INDEX in .env is set to 0</li>
+                <li>Make sure no other application is using the camera</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const streamImg = document.getElementById('stream');
+        const statusDiv = document.getElementById('status');
+        const streamStatus = document.getElementById('stream-status');
+        const streamUrl = 'http://localhost:8000/api/v1/camera/stream';
+
+        function startStream() {
+            console.log('Starting stream...');
+            statusDiv.className = 'status loading';
+            statusDiv.textContent = 'Connecting to camera stream...';
+            streamStatus.textContent = 'Connecting...';
+
+            streamImg.src = streamUrl + '?t=' + new Date().getTime();
+        }
+
+        function stopStream() {
+            console.log('Stopping stream...');
+            streamImg.src = '';
+            statusDiv.className = 'status';
+            statusDiv.textContent = 'Stream stopped';
+            streamStatus.textContent = 'Stopped';
+        }
+
+        // Event handlers for stream status
+        streamImg.addEventListener('load', function() {
+            console.log('Stream loaded successfully');
+            statusDiv.className = 'status success';
+            statusDiv.textContent = '✅ Camera stream active';
+            streamStatus.textContent = 'Active';
+        });
+
+        streamImg.addEventListener('error', function() {
+            console.error('Failed to load stream');
+            statusDiv.className = 'status error';
+            statusDiv.textContent = '❌ Failed to load stream. Check if the API server is running.';
+            streamStatus.textContent = 'Error';
+        });
+
+        // Start stream automatically when page loads
+        window.addEventListener('load', function() {
+            setTimeout(startStream, 500);
+        });
+    </script>
+</body>
+</html>

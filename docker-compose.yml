@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    environment:
+      - FIREBASE_SERVICE_ACCOUNT_JSON=/run/secrets/firebase_sa
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - MATCH_THRESHOLD=0.65
+      - LIVENESS_REQUIRED=true
+    secrets:
+      - firebase_sa
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - FIREBASE_SERVICE_ACCOUNT_JSON=/run/secrets/firebase_sa
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+    secrets:
+      - firebase_sa
+    depends_on:
+      - api
+secrets:
+  firebase_sa:
+    file: ./secrets/firebase-service-account.json
