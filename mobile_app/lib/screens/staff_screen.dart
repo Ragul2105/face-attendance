@@ -114,7 +114,7 @@ class _StaffScreenState extends State<StaffScreen> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
-                        initialValue: selectedGender,
+                        value: selectedGender,
                         decoration: const InputDecoration(labelText: 'Gender'),
                         items: const [
                           DropdownMenuItem(value: 'male', child: Text('Male')),
@@ -340,7 +340,7 @@ class _StaffScreenState extends State<StaffScreen> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int>(
-                        initialValue: selectedDay,
+                        value: selectedDay,
                         decoration:
                             const InputDecoration(labelText: 'Day of Week'),
                         items: const [

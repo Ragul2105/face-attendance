@@ -20,10 +20,10 @@ class ApiConfig {
   /// - http://192.168.1.100:8000  (typical home network)
   /// - http://10.0.0.100:8000     (typical office network)
   /// - http://172.20.10.2:8000    (iOS hotspot)
-    static const String baseUrl = String.fromEnvironment(
-        'API_BASE_URL',
-        defaultValue: 'http://172.16.125.3:8000',
-    );
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://172.16.125.3:8000',
+  );
 
   // API Endpoints
   static const String loginEndpoint = '/api/v1/auth/login';
