@@ -142,12 +142,16 @@ ipconfig | findstr IPv4
 
 Look for IP like `192.168.1.100`
 
-#### Step 2: Configure Mobile App
+#### Step 2: Configure Mobile App (Recommended)
 
-Edit `mobile_app/lib/config/api_config.dart`:
-```dart
-static const String baseUrl = 'http://192.168.1.100:8000';  // Replace with YOUR IP
+Pass API URL at runtime (no source-code edits required):
+
+```bash
+cd mobile_app
+flutter run --dart-define=API_BASE_URL=http://192.168.1.100:8000
 ```
+
+Optional fallback: if you do not pass `--dart-define`, app uses `mobile_app/lib/config/api_config.dart` default value.
 
 #### Step 3: Start Backend Server
 
@@ -168,7 +172,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```bash
 cd mobile_app
 flutter pub get
-flutter run
+flutter run --dart-define=API_BASE_URL=http://<YOUR_LAPTOP_IP>:8000
 ```
 
 Or use automated setup:
